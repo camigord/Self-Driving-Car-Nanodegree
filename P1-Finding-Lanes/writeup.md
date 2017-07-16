@@ -31,6 +31,8 @@ The proposed pipeline consists of 7 steps:
       - Having these new 'averaged' slopes and intersections, I compute the points at the boundaries defined by the ROI.
       - Now I can just plot these two lines on top of the image.
   7. The detected lanes are stacked on top of the original image.
+  
+  The images below show an example of the lines detected after step 5 (left) and after filtering and extrapolating those lines in step 6 (right).
 
 <img src="./test_images_output/solidWhiteCurve.jpg" width="350" height="200" /> <img src="./test_images_output/improved_solidWhiteCurve.jpg" width="350" height="200" />  
 
