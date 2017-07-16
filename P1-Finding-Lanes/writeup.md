@@ -45,6 +45,6 @@ There are several potential shortcomings, mainly because we are hardcoding most 
 
 One possible improvement would involve the way the detected lines are filtered. Right now, after applying the Hough transformation, we use all the detected lines and categorize them according to their slope. Because we know the location of our camera and because we are looking for road lanes, we could filter out any line which slope is not within a given range. For example an horizontal line is clearly not a road lane (at least not the kind we are looking for right now). Filtering out these lines will improve the accuracy and robustness of the final detector and would solve some of the problems I observed in the 'Challenge' video, where patches on the road and shadows were detected as almost horizontal lines.
 
+Another possible, although more complex improvement, could be to train a model to automatically tune the pipeline parameters based on the current image. This could be done either by manually tuning the parameters under different illumination and/or environmental conditions and by training a model to predict which parameters would work better given the current image statistics, or by defining some "_performance metric_" and by automatically learning to optimize the parameters in order to maximize performance. 
 
-
-Another potential improvement could be to ...
+Leaving the pipeline aside, however, it would be possible to improve the performance and robustness of the detector by training a deep model. Although a large amount of training samples and _labels_ would be required, the performance of such a model would be significantly better.
