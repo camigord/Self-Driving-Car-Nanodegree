@@ -9,7 +9,8 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/grayscale.jpg "Grayscale"
+[image1]: ./test_images_output/improved_solidWhiteCurve.jpg "Solid Lane"
+[image2]: ./test_images_output/solidWhiteCurve.jpg "Dash Lane"
 
 ---
 
@@ -30,10 +31,8 @@ The proposed pipeline consists of 7 steps:
       - Having these new 'averaged' slopes and intersections, I compute the points at the boundaries defined by the ROI.
       - Now I can just plot this two lines on top of the image.
   7. The detected lanes are stacked on top of the original image.
-
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
-
-![alt text][image1]
+ 
+<img src="./test_images_output/improved_solidWhiteCurve.jpg" width="350" height="200" /> | <img src="./test_images_output/solidWhiteCurve.jpg" width="350" height="200" />
 
 
 ### 2. Identify potential shortcomings with your current pipeline
