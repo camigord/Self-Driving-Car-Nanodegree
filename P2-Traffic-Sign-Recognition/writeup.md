@@ -166,16 +166,14 @@ If a well known architecture was chosen:
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
  
 
-###Test a Model on New Images
+### Testing the model on new images
 
-####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
-
-Here are five German traffic signs that I found on the web:
+I collected 10 different traffic signs from the web, some of which are shown below with their corresponding labels.
 
 ![alt text][image4] ![alt text][image5] ![alt text][image6] 
 ![alt text][image7] ![alt text][image8]
 
-The first image might be difficult to classify because ...
+Images X and Y may be harder to classify given that they are partially occluded by snow or leaves respectively. 
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -190,7 +188,7 @@ Here are the results of the prediction:
 | Slippery Road			| Slippery Road      							|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly classify 8 out of 10 traffic signs, which gives an accuracy of 80%. This may seem like a low accuracy compared to the 94.5% on the testing set, but we need to consider that we did not train the model with partially occluded samples. It is actually surprising that the model is capable of correctly classify one of the occluded examples (__image X__) given that half of the sign is covered by snow. If we ignore the missclassification of __image Y__ where the stop sign is mostly hidden from view, the model would achieve an accuracy of 90%.
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
