@@ -1,5 +1,4 @@
 # Traffic Sign Recognition
----
 
 [//]: # (Image References)
 
@@ -26,7 +25,7 @@ The goals / steps of this project are the following:
 ## Rubric Points
 ---
 
-### Writeup / README
+### Writeup
 
 The project code can be found in this [link](https://github.com/camigord/Self-Driving-Car-Nanodegree/blob/master/P2-Traffic-Sign-Recognition/Traffic_Sign_Classifier.ipynb). The TensorFlow model can be downloaded from [here](https://github.com/camigord/Self-Driving-Car-Nanodegree/tree/master/P2-Traffic-Sign-Recognition/model2).
 
@@ -53,25 +52,28 @@ We can also analyse how are the different labels distributed across the training
 
 ### Design and Test a Model Architecture
 
-####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
+In my first try, I decided to only normalize the data without any further preprocessing. My idea was that the color channels may provide additional information to the particular task of classifying traffic road signs. This step was performed directly on TensorFlow employing the function _tf.image.per_image_standardization()_ on every image in the current batch as shown below:
 
-As a first step, I decided to convert the images to grayscale because ...
+```
+  x = tf.placeholder(tf.float32, (None, 32, 32, 3))
+  x_norm = tf.map_fn(lambda img: tf.image.per_image_standardization(img), x)
+```
 
-Here is an example of a traffic sign image before and after grayscaling.
+The problem with this approach was that it did not generalize very well to the test images taken from the internet, getting a very low accuracy (~20%). I believe that because of the color information, the network may overfit to easily to the training data. Effects like illumination and the general background of the image may have a strong effect in the classification accuracy. 
+
+In my second try and after tuning the model, I also tried to convert the images to grayscale. Again, the preprocessing was applied using TensorFlow and the function _tf.image.rgb_to_grayscale()_ which is capable of operating directly on image batches.
+
+```
+x = tf.placeholder(tf.float32, (None, 32, 32, 3))
+# To Grayscale
+x_gray = tf.image.rgb_to_grayscale(x)
+# Normalization
+x_norm = tf.map_fn(lambda img: tf.image.per_image_standardization(img), x_gray)
+```
+
+Here is an example of a traffic sign image before and after grayscaling/normalization.
 
 ![alt text][image2]
-
-As a last step, I normalized the image data because ...
-
-I decided to generate additional data because ... 
-
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
-
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ... 
 
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
