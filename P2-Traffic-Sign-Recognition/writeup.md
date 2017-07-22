@@ -22,11 +22,6 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 
-## Rubric Points
----
-
-### Writeup
-
 The project code can be found in this [link](https://github.com/camigord/Self-Driving-Car-Nanodegree/blob/master/P2-Traffic-Sign-Recognition/Traffic_Sign_Classifier.ipynb). The TensorFlow model can be downloaded from [here](https://github.com/camigord/Self-Driving-Car-Nanodegree/tree/master/P2-Traffic-Sign-Recognition/model2).
 
 ### Data Set Summary & Exploration
@@ -94,9 +89,6 @@ The final model is based on the [VGG architecture](https://arxiv.org/pdf/1409.15
     <td align="center">1x1 stride, valid padding, outputs 30x30x16</td>
   </tr>
   <tr>
-    <td align="center" colspan="2">ReLU</td>
-  </tr>
-  <tr>
     <td align="center">Convolution 3x3</td>
     <td align="center">1x1 stride, valid padding, outputs 28x28x16</td>
   </tr>
@@ -111,9 +103,6 @@ The final model is based on the [VGG architecture](https://arxiv.org/pdf/1409.15
   <tr>
     <td align="center">Convolution 3x3</td>
     <td align="center">1x1 stride, valid padding, outputs 10x10x24</td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2">ReLU</td>
   </tr>
   <tr>
     <td align="center">Max pooling</td>
