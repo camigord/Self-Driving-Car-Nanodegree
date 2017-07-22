@@ -72,7 +72,7 @@ Here is an example of a traffic sign image before and after grayscaling/normaliz
 
 ### Model Architecture
 
-The final model is based on the [VGG architecture](https://arxiv.org/pdf/1409.1556.pdf) and consits of the following layers:
+The final model is based on the [VGG architecture](https://arxiv.org/pdf/1409.1556.pdf). It consists of 4 convolutional layers arranged as shown below. For simplicity, I have removed the activation function from the table, but all the layers (convolutions and fully connected layers) are followed by a _ReLU_ activation.
 
 <table>
   <tr>
@@ -130,10 +130,21 @@ The final model is based on the [VGG architecture](https://arxiv.org/pdf/1409.15
   </tr>
 </table>
 
+### Training the model
 
-#### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+The model was trained using the following parameteres: 
 
-To train the model, I used an ....
+| Parameter			    |     Value	        		| 
+|:-----------------:|:---------------------:| 
+| Optimizer      		| Adam   								| 
+| Learning rate     | 0.0001   							|
+| Batch size      	| 128   							  |	 
+| Epochs      	    | 30   									| 
+| Dropout      	    | 0.8   								|
+
+The figure below show the learning curve of the model. The number of epochs was tuned so that training stops when the performance of the model does not improve significantly any further. The learning rate was initially set to 0.01, but it was tuned by observing the learning curve. The batch size was set to 128 because it is large enough to provide an informative gradient while still matching the computational power I had at hand. Dropout was set to 0.5, but the model was not learning fast enough; increasing the value to 0.8 improved the training time and validation accuracy. 
+
+![Learning curve][image2]
 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
