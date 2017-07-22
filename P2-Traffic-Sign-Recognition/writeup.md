@@ -45,7 +45,7 @@ We can also analyse how are the different labels distributed across the training
 ![alt text][image1]
 
 
-### Design and Test a Model Architecture
+### Data preprocessing.
 
 In my first try, I decided to only normalize the data without any further preprocessing. My idea was that the color channels may provide additional information to the particular task of classifying traffic road signs. This step was performed directly on TensorFlow employing the function _tf.image.per_image_standardization()_ on every image in the current batch as shown below:
 
@@ -70,8 +70,7 @@ Here is an example of a traffic sign image before and after grayscaling/normaliz
 
 ![alt text][image2]
 
-
-####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
+### Model Architecture
 
 The final model is based on the [VGG architecture](https://arxiv.org/pdf/1409.1556.pdf) and consits of the following layers:
 
