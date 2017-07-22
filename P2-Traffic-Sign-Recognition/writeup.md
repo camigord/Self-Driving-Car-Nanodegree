@@ -13,7 +13,7 @@ The project code can be found in this [link](https://github.com/camigord/Self-Dr
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
 
-** Build a Traffic Sign Recognition Project**
+## Build a Traffic Sign Recognition Project
 
 The goals / steps of this project are the following:
 * Load the data set (see below for links to the project data set)
