@@ -101,18 +101,12 @@ The final model is based on the [VGG architecture](https://arxiv.org/pdf/1409.15
     <td align="center">1x1 stride, valid padding, outputs 28x28x16</td>
   </tr>
   <tr>
-    <td align="center" colspan="2">ReLU</td>
-  </tr>
-  <tr>
     <td align="center">Max pooling</td>
     <td align="center">2x2 stride,  valid padding, outputs 14x14x16</td>
   </tr>
   <tr>
     <td align="center">Convolution 3x3</td>
     <td align="center">1x1 stride, valid padding, outputs 12x12x24</td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2">ReLU</td>
   </tr>
   <tr>
     <td align="center">Convolution 3x3</td>
@@ -130,17 +124,11 @@ The final model is based on the [VGG architecture](https://arxiv.org/pdf/1409.15
     <td align="center">size = 400</td>
   </tr>
   <tr>
-    <td align="center" colspan="2">ReLU</td>
-  </tr>
-  <tr>
     <td align="center" colspan="2">Dropout</td>
   </tr>
   <tr>
     <td align="center">Fully connected</td>
     <td align="center">size = 120</td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2">ReLU</td>
   </tr>
   <tr>
     <td align="center" colspan="2">Dropout</td>
