@@ -28,9 +28,11 @@ The goals / steps of this project are the following:
 
 ### Writeup / README
 
-The project code can be found in this my [link](https://github.com/camigord/Self-Driving-Car-Nanodegree/blob/master/P2-Traffic-Sign-Recognition/Traffic_Sign_Classifier.ipynb).
+The project code can be found in this [link](https://github.com/camigord/Self-Driving-Car-Nanodegree/blob/master/P2-Traffic-Sign-Recognition/Traffic_Sign_Classifier.ipynb). The TensorFlow model can be downloades from [here](https://github.com/camigord/Self-Driving-Car-Nanodegree/tree/master/P2-Traffic-Sign-Recognition/model2).
 
 ### Data Set Summary & Exploration
+
+This is a short summary describing the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset).
 
 * The size of training set is 34799
 * The size of the validation set is 4410
@@ -38,11 +40,16 @@ The project code can be found in this my [link](https://github.com/camigord/Self
 * The shape of a traffic sign image is (32x32x3)
 * The number of unique classes/labels in the data set is 43
 
-# TODO: 2. Include an exploratory visualization of the dataset.
+### Visualizing and exploring the dataset.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+Lets start by visualizing some of the training samples and their corresponding labels:
 
 ![alt text][image1]
+
+We can also analyse how are the different labels distributed across the training, validation and testing datasets. The following image shows how many examples of each one of the 43 different categories are present on each dataset. It is possible to see that although these distributions are not uniform, the proportion of samples on each dataset is very similar.
+
+![alt text][image1]
+
 
 ### Design and Test a Model Architecture
 
