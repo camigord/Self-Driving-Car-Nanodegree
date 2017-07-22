@@ -3,7 +3,7 @@
 Second project in the UDACITYs Self-Driving Car Nanodegree
 
 ## Overview
-_ Applying deep convolutional networks to classify traffic signs. Training and validation are performed using the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset)._
+_Applying deep convolutional networks to classify traffic signs. Training and validation are performed using the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset)._
 
 
 ### Dependencies
