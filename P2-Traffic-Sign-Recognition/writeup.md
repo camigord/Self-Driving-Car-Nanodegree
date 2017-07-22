@@ -1,5 +1,7 @@
 # Traffic Sign Recognition
 
+The project code can be found in this [link](https://github.com/camigord/Self-Driving-Car-Nanodegree/blob/master/P2-Traffic-Sign-Recognition/Traffic_Sign_Classifier.ipynb). The TensorFlow model can be downloaded from [here](https://github.com/camigord/Self-Driving-Car-Nanodegree/tree/master/P2-Traffic-Sign-Recognition/model2).
+
 [//]: # (Image References)
 
 [image1]: ./examples/visualization.jpg "Visualization"
@@ -11,7 +13,7 @@
 [image7]: ./examples/placeholder.png "Traffic Sign 4"
 [image8]: ./examples/placeholder.png "Traffic Sign 5"
 
-**Build a Traffic Sign Recognition Project**
+** Build a Traffic Sign Recognition Project**
 
 The goals / steps of this project are the following:
 * Load the data set (see below for links to the project data set)
@@ -20,9 +22,6 @@ The goals / steps of this project are the following:
 * Use the model to make predictions on new images
 * Analyze the softmax probabilities of the new images
 * Summarize the results with a written report
-
-
-The project code can be found in this [link](https://github.com/camigord/Self-Driving-Car-Nanodegree/blob/master/P2-Traffic-Sign-Recognition/Traffic_Sign_Classifier.ipynb). The TensorFlow model can be downloaded from [here](https://github.com/camigord/Self-Driving-Car-Nanodegree/tree/master/P2-Traffic-Sign-Recognition/model2).
 
 ### Data Set Summary & Exploration
 
