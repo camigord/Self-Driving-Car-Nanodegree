@@ -4,14 +4,9 @@ The project code can be found in this [link](https://github.com/camigord/Self-Dr
 
 [//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image1]: ./assets/train_samples.jpg "Training samples"
+[image2]: ./assets/samples_per_categorie.jpg "Number of examples per categorie"
+[image3]: ./assets/test_samples.jpg "Testing examples"
 
 ## Build a traffic sign recognition project
 
@@ -41,7 +36,7 @@ Lets start by visualizing some of the training samples and their corresponding l
 
 We can also analyse how are the different labels distributed across the training, validation and testing datasets. The following image shows how many examples of each one of the 43 different categories are present on each dataset. It is possible to see that although these distributions are not uniform, the proportion of samples on each dataset is very similar.
 
-![alt text][image1]
+![alt text][image2]
 
 
 ### Data preprocessing.
@@ -64,10 +59,9 @@ x_gray = tf.image.rgb_to_grayscale(x)
 # Normalization
 x_norm = tf.map_fn(lambda img: tf.image.per_image_standardization(img), x_gray)
 ```
-
+<!--
 Here is an example of a traffic sign image before and after grayscaling/normalization.
-
-![alt text][image2]
+--->
 
 ### Model Architecture
 
@@ -143,8 +137,7 @@ The model was trained using the following parameteres:
 
 The figure below shows the learning curve of the model. The number of epochs was tuned so that training stops when the performance of the model does not improve significantly any further. The learning rate was initially set to 0.01, but it was tuned by observing the learning curve. The batch size was set to 128 because it is large enough to provide an informative gradient while still matching the computational power I had at hand. Dropout was set to 0.5, but the model was not learning fast enough; increasing the value to 0.8 improved the training time and validation accuracy. 
 
-![Learning curve][image2]
-
+<img src="./assets/training_curve.jpg" width="750" height="350" />
 
 #### Tuning the model 
 
@@ -168,8 +161,7 @@ The reason why I decided to use the VGG architecture is because it is very simil
 
 I collected 10 different traffic signs from the web, some of which are shown below with their corresponding labels.
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![alt text][image3]
 
 Images X and Y may be harder to classify given that they are partially occluded by snow or leaves respectively. 
 
@@ -178,13 +170,23 @@ Images X and Y may be harder to classify given that they are partially occluded 
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					| 
-|:-----------------:|:---------------------------------:| 
-| Wild animal      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+<table>
+  <tr>
+    <td align="center"><b>Image</b></td>
+    <td align="center"><b>Real label</b></td>
+    <td align="center"><b>Prediction</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./examples/example6.jpg" width="250" height="250" /></td>
+    <td align="center">Road work</td>
+    <td align="center">Bycicles crossing</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./examples/example7.jpg" width="250" height="250" /></td>
+    <td align="center">Stop</td>
+    <td align="center">Road work</td>
+  </tr>
+</table>
 
 
 The model was able to correctly classify 8 out of 10 traffic signs, which gives an accuracy of 80%. This may seem like a low accuracy compared to the 94.5% on the testing set, but we need to consider that we did not train the model with partially occluded samples. It is actually surprising that the model is capable of correctly classify one of the occluded examples (__image X__) given that half of the sign is covered by snow. If we ignore the missclassification of __image Y__ where the stop sign is mostly hidden from view, the model would achieve an accuracy of 90%.
