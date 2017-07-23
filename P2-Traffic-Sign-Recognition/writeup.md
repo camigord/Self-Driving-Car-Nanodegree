@@ -170,13 +170,23 @@ Images X and Y may be harder to classify given that they are partially occluded 
 
 Here are the results of the prediction:
 
-| Image			        |     Prediction	        					| 
-|:-----------------:|:---------------------------------:| 
-| Wild animal      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+<table>
+  <tr>
+    <td align="center"><b>Image</b></td>
+    <td align="center"><b>Real label</b></td>
+    <td align="center"><b>Prediction</b></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./examples/example6.jpg" width="250" height="250" /></td>
+    <td align="center">Road work</td>
+    <td align="center">Bycicles crossing</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="./examples/example7.jpg" width="250" height="250" /></td>
+    <td align="center">Stop</td>
+    <td align="center">Road work</td>
+  </tr>
+</table>
 
 
 The model was able to correctly classify 8 out of 10 traffic signs, which gives an accuracy of 80%. This may seem like a low accuracy compared to the 94.5% on the testing set, but we need to consider that we did not train the model with partially occluded samples. It is actually surprising that the model is capable of correctly classify one of the occluded examples (__image X__) given that half of the sign is covered by snow. If we ignore the missclassification of __image Y__ where the stop sign is mostly hidden from view, the model would achieve an accuracy of 90%.
