@@ -160,16 +160,15 @@ The reason why I decided to use the VGG architecture is because it is very simil
  
 ### Testing the model on new images
 
-I collected 10 different traffic signs from the web, some of which are shown below with their corresponding labels.
+I collected 10 different traffic signs from the web. The images and their respective label are shown below:
 
 ![alt text][image3]
 
-Images X and Y may be harder to classify given that they are partially occluded by snow or leaves respectively. 
+Some of the images are very challenging and may be harder to classify given that they are partially occluded by snow or leaves. The _stop_ shield for example is covered my leaves from a near tree, while one of the _road work_ signs is occluded by snow. 
 
 #### Performance on this 'new' testing set
-2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
-Here are the results of the prediction:
+The final model was capable of correctly classifying all the images except from the following two:
 
 <table>
   <tr>
@@ -178,44 +177,31 @@ Here are the results of the prediction:
     <td align="center"><b>Prediction</b></td>
   </tr>
   <tr>
-    <td align="center"><img src="./examples/example6.jpg" width="250" height="250" /></td>
-    <td align="center">Road work</td>
-    <td align="center">Bycicles crossing</td>
-  </tr>
-  <tr>
     <td align="center"><img src="./examples/example7.jpg" width="250" height="250" /></td>
     <td align="center">Stop</td>
     <td align="center">Road work</td>
   </tr>
+  <tr>
+    <td align="center"><img src="./examples/example6.jpg" width="250" height="250" /></td>
+    <td align="center">Road work</td>
+    <td align="center">Bycicles crossing</td>
+  </tr>
 </table>
 
+It is clear that the _stop_ shield represents a big challenge given that most of the sign is occluded and it is therefore not surprising that the model is not capable of correctly classifying this sample. In order to improve the performance of the model, we could augment the training data with partially occluded examples.
 
-The model was able to correctly classify 8 out of 10 traffic signs, which gives an accuracy of 80%. This may seem like a low accuracy compared to the 94.5% on the testing set, but we need to consider that we did not train the model with partially occluded samples. It is actually surprising that the model is capable of correctly classify one of the occluded examples (__image X__) given that half of the sign is covered by snow. If we ignore the missclassification of __image Y__ where the stop sign is mostly hidden from view, the model would achieve an accuracy of 90%.
+The second mistake was made when classifying the _road work_ sign. The problem with this sample, in my opinion, is the fact that this particular categorie is not seen very often during training. There are only around 250 examples of this kind of signs in the training set, and this may be the reason why the classification accuracy of this type of samples is lower.
 
-####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+Nevertheless, the model was able to correctly classify 8 out of 10 traffic signs, which gives an accuracy of 80%. This may seem like a low accuracy compared to the 94.5% on the testing set, but we need to consider that we did not train the model with partially occluded samples. It is actually surprising that the model is capable of correctly classify one of the occluded examples (_road work_) given that half of the sign is covered by snow. If we ignore the missclassification of the _stop_ shield where the sign is mostly hidden from view, the model would achieve an accuracy of 90%.
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+#### Analyzing the output of the model:
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
-
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
-
-
-For the second image ... 
+We can also analyze how certain the model is when making a prediction. Below, we present 5 of the testing images together with the probability of the top 5 categories as given by the model. The code for generating theses figures and the results for the missing examples can be found Ipython [notebook](https://github.com/camigord/Self-Driving-Car-Nanodegree/blob/master/P2-Traffic-Sign-Recognition/Traffic_Sign_Classifier.ipynb).
 
 <img src="./assets/result1.jpg" width="750" height="300" />
 <img src="./assets/result2.jpg" width="750" height="300" />
 <img src="./assets/result3.jpg" width="750" height="300" />
-<img src="./assets/result4.jpg" width="750" height="300" />
 <img src="./assets/result5.jpg" width="750" height="300" />
+<img src="./assets/result4.jpg" width="750" height="300" />
 
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
-
-![alt text][image4]
+For the first image, the model is relatively sure that this is a _Wild animal crossing_ sign (probability of 14.1%). For the second and third images, and although these examples are covered by snow, the model is also capable of correctly classifying the signs. For the second image, the models seems quite confident about the prediction (probability 11.9%), while for the third image, the model seems a bit confused between classifying the sign correctly as a _Road work_ or as a _Priority road_ (8.6% vs 7.0% respectively). For the fourth image, the model is quite sure that this is a _Speed limit_ sign, but it is not very confident about what is the exact speed limit. Fortunately, it seems to classify the image correctly by a very low margin. The final image shoes one of our occluded examples: the _Stop_ shield. In this case, the model missclasifies the image but it also seems to be quite uncertain about what is the correct label with no probability going higher than 6.0%.
