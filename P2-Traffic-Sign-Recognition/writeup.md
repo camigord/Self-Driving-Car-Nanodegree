@@ -25,7 +25,7 @@ The goals / steps of this project are the following:
 
 ### Summarizing the dataset
 
-This is a short summary describing the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset).
+This is a short summary describing the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). The code for extracting this information from the dataset is located in the second code cell of the Ipython [notebook](https://github.com/camigord/Self-Driving-Car-Nanodegree/blob/master/P2-Traffic-Sign-Recognition/Traffic_Sign_Classifier.ipynb).
 
 * The size of training set is 34799
 * The size of the validation set is 4410
@@ -53,7 +53,7 @@ In my first try, I decided to only normalize the data without any further prepro
   x_norm = tf.map_fn(lambda img: tf.image.per_image_standardization(img), x)
 ```
 
-The problem with this approach was that it did not generalize very well to the test images taken from the internet, getting a very low accuracy (~20%). I believe that because of the color information, the network may overfit to easily to the training data. Effects like illumination and the general background of the image may have a strong effect in the classification accuracy. 
+The problem with this approach was that it did not generalize very well to the test images taken from the internet, getting a very low accuracy (~20%). I believe that because of the color information, the network may overfit too easily to the training data. Effects like illumination and the general background of the image may have a strong effect in the classification accuracy. 
 
 In my second try and after tuning the model, I also tried to convert the images to grayscale. Again, the preprocessing was applied using TensorFlow and the function _tf.image.rgb_to_grayscale()_ which is capable of operating directly on image batches.
 
@@ -141,31 +141,29 @@ The model was trained using the following parameteres:
 | Epochs      	    | 30   									| 
 | Dropout      	    | 0.8   								|
 
-The figure below show the learning curve of the model. The number of epochs was tuned so that training stops when the performance of the model does not improve significantly any further. The learning rate was initially set to 0.01, but it was tuned by observing the learning curve. The batch size was set to 128 because it is large enough to provide an informative gradient while still matching the computational power I had at hand. Dropout was set to 0.5, but the model was not learning fast enough; increasing the value to 0.8 improved the training time and validation accuracy. 
+The figure below shows the learning curve of the model. The number of epochs was tuned so that training stops when the performance of the model does not improve significantly any further. The learning rate was initially set to 0.01, but it was tuned by observing the learning curve. The batch size was set to 128 because it is large enough to provide an informative gradient while still matching the computational power I had at hand. Dropout was set to 0.5, but the model was not learning fast enough; increasing the value to 0.8 improved the training time and validation accuracy. 
 
 ![Learning curve][image2]
 
 
-####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+#### Tuning the model 
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+| Dataset			      |     Accuracy	        | 
+|:-----------------:|:---------------------:| 
+| Training set      | 99.7%  								| 
+| Validation set    | 97.2%   							|
+| Testing set      	| 94.5%  							  |	 
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
+As mentioned above, I implemented the model based on the [VGG architecture](https://arxiv.org/pdf/1409.1556.pdf), which was a state of the art classification model a couple of years ago. The main idea behind this architecture is that we can replace a large receptive field convolutional layer with a stack of very small convolutional filters. The authors of the original paper demonstrated that this not only reduces the number of parameters in the model, but also improves the performance by making the classification model more discriminative. 
+
+ - Initially I trained the model without dropout, which resulted in the model quickly overfitting to the training set when using a learning rate of 0.01. 
+ - In my second attempt I introduced dropout with a probability of 50% after every fully connected layer and reduced the learning rate to 0.0001. This model, however, did not learn as fast as expected and was converging towards a training accuracy of around 60% after 40 epochs.
+ - In my third attempt, and based on the previous results, I modified the dropout layers by keeping 80% of the activations while still using a small learning rate (0.0001). My logic was that the model may had not been complex enough to generalize to the data when using only 50% of the activations. This last model converged to the accuracies presented above in less than 30 epochs.
  
-
+The reason why I decided to use the VGG architecture is because it is very similar to LeNet and very easy to implement on TensorFlow. Moreover, I was confident that this architecture should easily outperform LeNet provided proper tuning. If LeNet can achieve a classification accuracy of around 89% on this dataset, I was sure that a version of the VGG architecture improved by recent techniques like Dropout should improve these values and easily reach an accuracy of 93%.
+ 
 ### Testing the model on new images
 
 I collected 10 different traffic signs from the web, some of which are shown below with their corresponding labels.
@@ -175,13 +173,14 @@ I collected 10 different traffic signs from the web, some of which are shown bel
 
 Images X and Y may be harder to classify given that they are partially occluded by snow or leaves respectively. 
 
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+#### Performance on this 'new' testing set
+2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
 Here are the results of the prediction:
 
 | Image			        |     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
+|:-----------------:|:---------------------------------:| 
+| Wild animal      		| Stop sign   									| 
 | U-turn     			| U-turn 										|
 | Yield					| Yield											|
 | 100 km/h	      		| Bumpy Road					 				|
