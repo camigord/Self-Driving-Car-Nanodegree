@@ -7,6 +7,7 @@ The project code can be found in this [link](https://github.com/camigord/Self-Dr
 [image1]: ./assets/train_samples.jpg "Training samples"
 [image2]: ./assets/samples_per_categorie.jpg "Number of examples per categorie"
 [image3]: ./assets/test_samples.jpg "Testing examples"
+[image4]: ./assets/activations.jpg "Activations in first convolutional block"
 
 ## Build a traffic sign recognition project
 
@@ -208,7 +209,13 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 
 For the second image ... 
 
+<img src="./assets/result1.jpg" width="750" height="300" />
+<img src="./assets/result2.jpg" width="750" height="300" />
+<img src="./assets/result3.jpg" width="750" height="300" />
+<img src="./assets/result4.jpg" width="750" height="300" />
+<img src="./assets/result5.jpg" width="750" height="300" />
+
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 ####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
 
-
+![alt text][image4]
