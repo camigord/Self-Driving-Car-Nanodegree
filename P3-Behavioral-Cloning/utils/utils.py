@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import csv
 
-def get_data_path(data_folders, minimum_speed=20.0, angle_correction=0.25, target_avg_factor = 1.0, num_bins=40):
+def get_data_path(data_folders, minimum_speed=10.0, angle_correction=0.25, target_avg_factor = 1.0, num_bins=40):
     image_paths = []
     steering_angles = []
 

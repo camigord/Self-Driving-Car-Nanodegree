@@ -16,11 +16,12 @@ from keras.regularizers import l2
 
 # Function to preprocess and to load data_folder
 from utils.utils import *
+import pickle
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 
-flags.DEFINE_integer('epochs', 15, "The number of epochs.")
+flags.DEFINE_integer('epochs', 50, "The number of epochs.")
 flags.DEFINE_integer('batch_size', 128, "The batch size.")
 
 def main(_):
@@ -82,6 +83,7 @@ def main(_):
     plt.legend(['training set', 'validation set'], loc='upper right')
     plt.show()
 
+    pickle.dump(history_object.history, open( "train_history.p", "wb" ) )
     model.save('model.h5')
 
 if __name__ == '__main__':
