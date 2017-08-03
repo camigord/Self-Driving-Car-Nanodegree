@@ -60,9 +60,9 @@ The steering angle collected when training is relative to the center-mounted cam
     <td><img src="./assets/img_right.jpeg" width="500"></td>
   </tr>
   <tr>
-    <td><center>Angle = 0.33</td>
-    <td><center>Angle = 0.08</td>
-    <td><center>Angle = -0.16</td>
+    <td align="center">Angle = 0.33</td>
+    <td align="center">Angle = 0.08</td>
+    <td align="center">Angle = -0.16</td>
   </tr>
 </table>
 
