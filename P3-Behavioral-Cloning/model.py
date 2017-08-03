@@ -34,6 +34,7 @@ def main(_):
     # Folders containing provided samples and self-collected images
     data_folders = ['./data','./data2']
 
+    # Getting the paths to the training images
     image_paths, steering_angles = get_data_path(data_folders)
 
     # Split data into training and validation
@@ -62,10 +63,7 @@ def main(_):
     model.add(Dense(100, activation='elu', kernel_regularizer=l2(0.001)))
     model.add(Dense(50, activation='elu', kernel_regularizer=l2(0.001)))
     model.add(Dense(10, activation='elu', kernel_regularizer=l2(0.001)))
-    #model.add(Dense(1, activation='tanh'))
     model.add(Dense(1))
-
-    #model.add(MaxPooling2D(pool_size=2)
 
     optimizer = optimizers.Adam(lr=0.0001)
     model.compile(loss='mse', optimizer=optimizer)
@@ -83,6 +81,7 @@ def main(_):
     plt.legend(['training set', 'validation set'], loc='upper right')
     plt.show()
 
+    # Save data 
     pickle.dump(history_object.history, open( "train_history.p", "wb" ) )
     model.save('model.h5')
 

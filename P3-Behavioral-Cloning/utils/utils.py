@@ -4,6 +4,12 @@ import cv2
 import csv
 
 def get_data_path(data_folders, minimum_speed=10.0, angle_correction=0.25, target_avg_factor = 1.0, num_bins=40):
+    '''
+    This function gets the path to the training samples, adjust the angles for left/right images and discard those samples
+    which were taken traveling at less than the minimum speed.
+    The function also tries to control the distribution of training samples by analyzing the histogram of training angles and removing those bins which are
+    over-represented.
+    '''
     image_paths = []
     steering_angles = []
 
@@ -34,11 +40,11 @@ def get_data_path(data_folders, minimum_speed=10.0, angle_correction=0.25, targe
     image_paths = np.array(image_paths)
     steering_angles = np.array(steering_angles)
 
-    # Try to normalize the distribution of training samples as shown in jupyter notebook (NAME)
+    # Try to normalize the distribution of training samples as shown in jupyter notebook (data_preprocessing.ipynb)
     hist, bins = np.histogram(steering_angles, num_bins)
     avg_samples_per_bin = np.mean(hist)
 
-    # Computing keep probability for each sample
+    # Computing keep probability for each sample. For each bin, we try to keep samples proportionally to how over or under-represented is each 'categorie'.
     new_target_avg = avg_samples_per_bin * target_avg_factor
     keep_probs = []
     for i in range(num_bins):

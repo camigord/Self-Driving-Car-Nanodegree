@@ -25,7 +25,7 @@ prev_image_array = None
 
 def preprocess_image(img):
     '''
-    Adds gaussian blur and transforms BGR to YUV.
+    Adds gaussian blur and transforms RGB to YUV.
     '''
     new_img = cv2.GaussianBlur(img, (3,3), 0)
     new_img = cv2.cvtColor(new_img, cv2.COLOR_RGB2YUV)
@@ -53,8 +53,11 @@ class SimplePIController:
 
 
 controller = SimplePIController(0.1, 0.002)
-#set_speed = 20
-set_speed = 9
+
+# For first scenario
+set_speed = 20
+# For challenging scenario
+#set_speed = 9
 controller.set_desired(set_speed)
 
 
