@@ -1,10 +1,5 @@
 # Behavioral Cloning Project
 
-[//]: # (Image References)
-
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder_small.png "Recovery Image"
-
 <table>
   <tr>
     <td><img src="./assets/track1.gif?raw=true" width="500"></td>
@@ -31,7 +26,7 @@ The current repository includes the following files:
 * [drive.py](drive.py) for driving the car in autonomous mode
 * model.h5 containing the trained model
 * [data_preprocessing.ipynb](data_preprocessing.ipynb) to visualize the preprocessing steps
-* Two videos: run1.mp4 and run2.mp4, showing the performance of the final model on both tracks
+* Two videos: track1.mp4 and track2.mp4, showing the performance of the final model on both tracks
 
 ## How to train and run the model
 
@@ -65,6 +60,8 @@ The first preprocessing step was to ignore any training sample where the velocit
 #### 2.2 Adjusting left- and right-mounted cameras
 The steering angle collected when training is relative to the center-mounted camera. If we want to augment the data by using the other two camera views we need to properly adjust the steering angles which are assigned to these training images. When loading the 3 different images we adjust the steering angle of the left- and the right-mounted camera images by a factor of +0.25 and -0.25 respectively.
 
+The images below show an example of the 3 camera views. As described in section 2.6, we will later crop the top and bottom of the images in order to remove the sky and the portion of the car which remains visible at the bottom, thus making it easier for the network to generalize.
+
 <table>
   <tr>
     <td><img src="./assets/img_left.jpeg" width="500"></td>
@@ -81,6 +78,52 @@ The steering angle collected when training is relative to the center-mounted cam
 #### 2.3 Flattening the data distribution
 Given the structure of the training tracks where long segments of the road contained no curves, it is very easy to collect a lot of data where the steering angle is very low if not 0. The problem with this data is that it biases the training of the network towards predicting very small steering angles all the time, and thus performing very poorly when facing sharp turns. The original distribution of the steering angles can be seen below.
 
-![alt text][image2]
+<img src="./assets/original_dist.jpeg" width="300">
 
-#### 2.3 Add random distortions
+It is clear that driving straight is over-represented (the left and right peaks arise from using the left- and right-mounted cameras) and that it is necessary to somehow delete some of these training samples in order to flat the distribution and achieve a more balanced training set. The black line in the image represents the average of examples over the different bins in the histogram.
+
+To flatten the distribution I decided to follow the advice posted at the UDACITY's forums and to remove samples in a probabilistic manner. I compute a _keep_probability_ for each of the bins in the histogram based on how far the number of samples in that bin is from the total average. If the current bin contains less samples than the average, _keep_probability_ is set 1.0; otherwise the probability decreases proportionally to how far is the number of samples from the current average. After following this approach and removing or keeping each sample according to its respective probability, the resulting data distribution looks like this:
+
+<img src="./assets/flat_dist.jpeg" width="300">
+
+Although it is still not perfect, it is already a lot better than the original distribution. We could keep improving the training dataset by carefully recording more data, but this distribution worked fine for me. Moreover, we can still selectively augment some of the dataset as described in section 2.5.
+
+#### 2.4 Add random distortions
+
+In order to augment the data and improve the capability of the network to generalize to different conditions, several random distortions are applied on the training images when generating the training batches. _These distortions are not applied when validating or testing the network_.
+
+We start by filtering the image using Gaussian Blur and converting the image into YUV space. We then randomly adjust the brightness of the image, introduce a random shadow and a random change in perspective. The shadow effect is achieved by randomly darkening a rectangular section of the image. The perspective transformation allows the model to be more robust to the situations observed in the second and more challenging task. An example of each of the steps is presented below.
+
+<table>
+  <tr>
+    <td align="center">Original</td>
+    <td><img src="./assets/example.jpeg" width="500"></td>
+  </tr>
+  <tr>
+    <td align="center">Blurred image</td>
+    <td><img src="./assets/blurred.jpeg" width="500"></td>
+  </tr>
+  <tr>
+    <td align="center">Random brightness</td>
+    <td><img src="./assets/bright.jpeg" width="500"></td>
+  </tr>
+  <tr>
+    <td align="center">Add shadow</td>
+    <td><img src="./assets/shadow.jpeg" width="500"></td>
+  </tr>
+  <tr>
+    <td align="center">Change perspective</td>
+    <td><img src="./assets/perspective.jpeg" width="500"></td>
+  </tr>
+</table>
+
+#### 2.5 Augmenting data by flipping images
+
+The training data generator loads the images, preprocesses them and applies the previously described distortions. Moreover, it augments the data by randomly flipping the images and properly adjusting the steering angles (multiplying by -1). However, we do not want to augment all the data! The generator applies this random flipping only to those images which absolute steering angle is larger than 0.3. This allows us to further compensate for the fact that our training distribution is still not perfectly balanced.
+
+#### 2.6 Normalizing and cropping
+Finally, the training images are normalized directly at the input of the model using Keras Lambda function. Additionally, we crop the input images in order to remove the top (sky) and the bottom (car) of the images:
+```
+model.add(Lambda(lambda x: x/127.5 - 1., input_shape=(160,320,3)))
+model.add(Cropping2D(cropping=((50,25), (0,0))))
+```
