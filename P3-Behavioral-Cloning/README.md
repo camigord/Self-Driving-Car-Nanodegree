@@ -5,6 +5,18 @@
 [image1]: ./examples/placeholder.png "Model Visualization"
 [image2]: ./examples/placeholder_small.png "Recovery Image"
 
+<table>
+  <tr>
+    <td><img src="./assets/track1.gif?raw=true" width="500"></td>
+    <td><img src="./assets/track2.gif?raw=true" width="500"></td>
+  </tr>
+  <tr>
+    <td align="center">Track 1</td>
+    <td align="center">Track 2</td>
+  </tr>
+</table>
+
+
 ## Overview
 
 This is my implementation code for the third project in the UDACITY Self-Driving Car Nanodegree . The purpose of the project is to teach a convolutional neural network how to replicate (or to _clone_) the behavior of a human driver.
@@ -70,7 +82,5 @@ The steering angle collected when training is relative to the center-mounted cam
 Given the structure of the training tracks where long segments of the road contained no curves, it is very easy to collect a lot of data where the steering angle is very low if not 0. The problem with this data is that it biases the training of the network towards predicting very small steering angles all the time, and thus performing very poorly when facing sharp turns. The original distribution of the steering angles can be seen below.
 
 ![alt text][image2]
-
-
 
 #### 2.3 Add random distortions
