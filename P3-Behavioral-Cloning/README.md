@@ -97,23 +97,23 @@ We start by filtering the image using Gaussian Blur and converting the image int
 <table>
   <tr>
     <td align="center">Original</td>
-    <td><img src="./assets/example.jpeg" width="500"></td>
+    <td><img src="./assets/example.jpeg" width="350"></td>
   </tr>
   <tr>
     <td align="center">Blurred image</td>
-    <td><img src="./assets/blurred.jpeg" width="500"></td>
+    <td><img src="./assets/blurred.jpeg" width="350"></td>
   </tr>
   <tr>
     <td align="center">Random brightness</td>
-    <td><img src="./assets/bright.jpeg" width="500"></td>
+    <td><img src="./assets/bright.jpeg" width="350"></td>
   </tr>
   <tr>
     <td align="center">Add shadow</td>
-    <td><img src="./assets/shadow.jpeg" width="500"></td>
+    <td><img src="./assets/shadow.jpeg" width="350"></td>
   </tr>
   <tr>
     <td align="center">Change perspective</td>
-    <td><img src="./assets/perspective.jpeg" width="500"></td>
+    <td><img src="./assets/perspective.jpeg" width="350"></td>
   </tr>
 </table>
 
