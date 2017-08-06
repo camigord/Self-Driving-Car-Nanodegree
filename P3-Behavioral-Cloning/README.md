@@ -91,6 +91,8 @@ Although it is still not perfect, it is already a lot better than the original d
 
 #### 2.4 Add random distortions
 
+The techniques presented in this section are inspired on the work from [Jeremy Shannon](https://github.com/jeremy-shannon/CarND-Behavioral-Cloning-Project). I used some of his code for preprocessing the images (shadowing and perspective change) and I combined it with some of my own ideas. 
+
 In order to augment the data and improve the capability of the network to generalize to different conditions, several random distortions are applied on the training images when generating the training batches. _These distortions are not applied when validating or testing the network_.
 
 We start by filtering the image using Gaussian Blur and converting the image into YUV space. We then randomly adjust the brightness of the image, introduce a random shadow and a random change in perspective. The shadow effect is achieved by randomly darkening a rectangular section of the image. The perspective transformation allows the model to be more robust to the situations observed in the second and more challenging task. An example of each of the steps is presented below.
