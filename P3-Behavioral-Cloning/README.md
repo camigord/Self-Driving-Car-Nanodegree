@@ -141,13 +141,10 @@ These initial results proved to me the importance of having a well balanced data
 <table border="0">
   <tr>
     <td width="40%" align="left">- All the convolutional and fully-connected layers are followed by an ELU activation function.</td>
-    <td rowspan="3"><img src="./assets/architecture.jpg" width="300"></td>
+    <td rowspan="2" align="center"><img src="./assets/architecture.jpg" width="300"></td>
   </tr>
   <tr>
-    <td>L2 regularization is applied on all the layers (lambda = 0.001)</td>
-  </tr>
-  <tr>
-    <td></td>
+    <td align="left">L2 regularization is applied on all the layers (lambda = 0.001)</td>
   </tr>
 </table>
 
