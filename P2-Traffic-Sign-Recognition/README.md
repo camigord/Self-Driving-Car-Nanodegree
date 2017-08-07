@@ -2,10 +2,10 @@
 
 <table>
   <tr>
-    <td align="center"><img src="./assets/result2.jpg" width="500" height="200" /></td>
+    <td align="center"><img src="./assets/result2.jpg" width="700" height="300" /></td>
   </tr>
   <tr>
-    <td align="center"><img src="./assets/result5.jpg" width="500" height="200" /></td>
+    <td align="center"><img src="./assets/result5.jpg" width="700" height="300" /></td>
   </tr>
 </table>
 
