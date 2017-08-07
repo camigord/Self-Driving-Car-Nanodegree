@@ -5,7 +5,7 @@
     <td align="center"><img src="./assets/result2.jpg" width="700" height="300" /></td>
   </tr>
   <tr>
-    <td align="center"><img src="./assets/result5.jpg" width="700" height="300" /></td>
+    <td align="center"><img src="./assets/result5.jpg" width="650" height="280" /></td>
   </tr>
 </table>
 
