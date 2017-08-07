@@ -22,11 +22,12 @@ Training data was collected using the simulation environment provided by UDACITY
 
 The current repository includes the following files:
 
-* [model.py](model.py) containing the script to create and train the model
+* [model.py](model.py) containing the script to create and train the model.
 * [drive.py](drive.py) for driving the car in autonomous mode
-* model.h5 containing the trained model
-* [data_preprocessing.ipynb](data_preprocessing.ipynb) to visualize the preprocessing steps
-* Two videos: track1.mp4 and track2.mp4, showing the performance of the final model on both tracks
+* model.h5 containing the trained model.
+* [utils.py](./utils/utils,py) containing the training data generator and the preprocessing functions.
+* [data_preprocessing.ipynb](data_preprocessing.ipynb) to visualize the preprocessing steps.
+* Two videos: track1.mp4 and track2.mp4, showing the performance of the final model on both tracks.
 
 ## How to train and run the model
 
@@ -90,6 +91,8 @@ Although it is still not perfect, it is already a lot better than the original d
 
 #### 2.4 Add random distortions
 
+The techniques presented in this section are inspired on the work from [Jeremy Shannon](https://github.com/jeremy-shannon/CarND-Behavioral-Cloning-Project). I used some of his code for preprocessing the images (shadowing and perspective change) and I combined it with some of my own ideas. 
+
 In order to augment the data and improve the capability of the network to generalize to different conditions, several random distortions are applied on the training images when generating the training batches. _These distortions are not applied when validating or testing the network_.
 
 We start by filtering the image using Gaussian Blur and converting the image into YUV space. We then randomly adjust the brightness of the image, introduce a random shadow and a random change in perspective. The shadow effect is achieved by randomly darkening a rectangular section of the image. The perspective transformation allows the model to be more robust to the situations observed in the second and more challenging task. An example of each of the steps is presented below.
@@ -127,3 +130,54 @@ Finally, the training images are normalized directly at the input of the model u
 model.add(Lambda(lambda x: x/127.5 - 1., input_shape=(160,320,3)))
 model.add(Cropping2D(cropping=((50,25), (0,0))))
 ```
+### Model Architecture and Training Strategy
+
+The first model I tried is shown below and was based on the architecture proposed by [Nvidia](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf) for self-driving vars.
+
+<img src="./assets/nvidia.jpg" width="300">
+
+Initially I had some problems training the model and avoiding overfitting. During my first experiments, none of the preprocessing steps presented before had been applied and I was only using the training dataset provided by UDACITY. For this reason, it happened that the model was not capable of generalizing and was performing rather poorly in both tracks (specially when facing sharp curves).
+
+These initial results proved to me the importance of having a well balanced dataset and encouraged me to work on the different augmentation and preprocessing techniques mentioned in previous sections. Once I was done preparing the new training data, I performed some slight modifications on the previous model and I ended up with the following architecture:
+
+<table border="0">
+  <tr>
+    <td width="40%" align="left">- All the convolutional and fully-connected layers are followed by an ELU activation function.</td>
+    <td rowspan="2" align="center"><img src="./assets/architecture.jpg" width="300"></td>
+  </tr>
+  <tr>
+    <td align="left">L2 regularization is applied on all the layers (lambda = 0.001)</td>
+  </tr>
+</table>
+
+In general, the model is quite similar to the Nvidia model and introduces only a few modifications:
+
+* A Dropout layer after the convolutional layers. The keep probability was set to 80% after training and comparing with different values.
+
+* ELU activations instead of ReLUs.
+
+* L2 regularization to avoid overfitting.
+
+The model was trained using an ADAM optimizer with a learning rate of 0.0001. This learning rate was tuned by observing the training curves of the model after 50 epochs. The batch size was set to 128 during all the experiments.
+
+### Drive.py
+
+In order to test the model in Autonomous mode, the file [_drive.py_](drive.py) had to be modified in order to apply the same preprocessing to the input images. The function _preprocess_image()_ takes care of applying a Gaussian blur to the image and transforms it into YUV space.
+
+I also modified the testing speed for the first track and increased it from 9.0 to 20.0. The model performs well with both speeds but it is faster to evaluate the performance when driving fast! The second track, however, does not allow us to modify the speed given the large amount of sharp curves.
+
+### Results
+
+The figure below shows the training and validation errors of the final model when trained during 50 epochs. The training was stopped there because it is clear that the model has already converged and further training may result in overfitting. It can also be seen that with the proposed learning rate both the validation and training errors decreased smoothly.
+
+<img src="./assets/Figure_1.png" width="600">
+
+The behaviour of the model when driving on both tracks can be seen in the animations at the beginning of this file. It is also possible to download the videos [track1.mp4](track1.mp4) and [track2.mp4](track2.mp4) where a first person view of the driving was recorded. These videos, however, have a lower resolutions that the animations provided above.
+
+The results show a nice and very smooth driving behavior on both tracks. On the first track, the model is even capable of driving much faster than what was originally proposed without having any troubles. The second track is much more challenging but the model is capable of driving the entire track without going out of the road.
+
+### Conclusions
+
+Most of my time during this project was spent collecting, analyzing and preprocessing the training data. The model architecture ended up not being very relevant or even challenging and that showed me how important having proper data can be. It doesn't matter if you have a state of the art architecture if you do not invest a proper amount of time preparing your data.
+
+I had, however, a lot of fun implementing this project and I can imagine different ways how the current model could be further improved. It would be very interesting, for example, to train the model to also predict other parameters like speed. If the network is capable of learning to steer the vehicle, it surely can also learn how fast it is supposed to be driving in a given section of the road.
