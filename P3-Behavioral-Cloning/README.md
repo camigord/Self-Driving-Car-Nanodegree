@@ -14,7 +14,7 @@
 
 ## Overview
 
-This is my implementation code for the third project in the UDACITY Self-Driving Car Nanodegree . The purpose of the project is to teach a convolutional neural network how to replicate (or to _clone_) the behavior of a human driver.
+This is my implementation code for the third project in the UDACITY Self-Driving Car Nanodegree. The purpose of the project is to teach a convolutional neural network how to replicate (or to _clone_) the behavior of a human driver.
 
 Training data was collected using the simulation environment provided by UDACITY. The simulator can be downloaded from [here](https://github.com/udacity/self-driving-car-sim).
 
@@ -91,7 +91,7 @@ Although it is still not perfect, it is already a lot better than the original d
 
 #### 2.4 Add random distortions
 
-The techniques presented in this section are inspired on the work from [Jeremy Shannon](https://github.com/jeremy-shannon/CarND-Behavioral-Cloning-Project). I used some of his code for preprocessing the images (shadowing and perspective change) and I combined it with some of my own ideas. 
+The techniques presented in this section are inspired on the work from [Jeremy Shannon](https://github.com/jeremy-shannon/CarND-Behavioral-Cloning-Project). I used some of his code for preprocessing the images (shadowing and perspective change) and I combined it with some of my own ideas.
 
 In order to augment the data and improve the capability of the network to generalize to different conditions, several random distortions are applied on the training images when generating the training batches. _These distortions are not applied when validating or testing the network_.
 
