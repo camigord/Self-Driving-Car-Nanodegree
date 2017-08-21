@@ -25,7 +25,7 @@ The current repository includes the following files:
 * [model.py](model.py) containing the script to create and train the model.
 * [drive.py](drive.py) for driving the car in autonomous mode
 * model.h5 containing the trained model.
-* [utils.py](./utils/utils,py) containing the training data generator and the preprocessing functions.
+* [utils.py](./utils/utils.py) containing the training data generator and the preprocessing functions.
 * [data_preprocessing.ipynb](data_preprocessing.ipynb) to visualize the preprocessing steps.
 * Two videos: track1.mp4 and track2.mp4, showing the performance of the final model on both tracks.
 
