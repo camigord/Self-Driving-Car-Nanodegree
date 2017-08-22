@@ -1,5 +1,10 @@
 # Advanced Lane Finding
 
+<table>
+  <tr>
+    <td><img src="./assets/project_video.gif?raw=true" width="500"></td>
+  </tr>
+</table>
 
 ## Overview
 
@@ -11,9 +16,10 @@ The current repository includes the following files:
 
 * [Generate_video.ipynb](Generate_video.ipynb) containing the final pipeline and capable of loading and processing frames from the given videos.
 * [Binary_Images.ipynb](Binary_Images.ipynb) describing how the binary images are generated and showing some filter examples.
-* [project.ipynb](project.ipynb) Describing each step in the pipeline.
+* [Processing_Steps.ipynb](Processing_Steps.ipynb) Describing each step in the pipeline.
 * [utils.py](./utils/utils.py) containing all the described functions.
 * [Line.py](./utils/Line.py) containing the Line Class used to keep track of each lane (left & right lanes).
+* A folder [output_videos](./output_videos) containing the 3 generated video sequences.
 
 The generated videos are stored in the folder [output_videos](./output_videos).
 
@@ -21,7 +27,7 @@ The generated videos are stored in the folder [output_videos](./output_videos).
 
 ### 1. Camera calibration
 
-I started the project by computing the camera calibration matrix and distortion coefficients using the images in [this](./camera_cal) folder. The entire code can be found [here](project.ipynb).
+I started the project by computing the camera calibration matrix and distortion coefficients using the images in [this](./camera_cal) folder. The entire code can be found [here](Processing_Steps.ipynb).
 
 I used the OpenCV function _cv2.findChessboardCorners()_ to detect all the inner corners on each calibration image. Using these points together with a set of fixed _object points_ I am able to compute the camera calibration and distortion coefficients using the _cv2.calibrateCamera()_ function. Finally, I save the results as a pickle [file](./camera_cal/coefficients.p) in order to be able to load the coefficients any time when required.
 
@@ -96,9 +102,27 @@ I am only considering the lowest fifth part of the image when computing the hist
 
 Once we have the histogram we can find the peaks at the left and right sides of the image. I decided to introduce a _margin  value_ in order to constraint the search regions both at the left and the right sides. The final function is called _find_lanes_hist(top_down)_ and appears in lines 106 through 119 of the file [utils.py](./utils/utils.py). The function takes the thresholded and warped top-down view image and return the origin of the left and the right lanes.
 
+As it will be explained in section 7, it will not always be necessary to identify the origin of the lanes. If the detection on the previous frame was successful and a reliable fit was estimated, we can use this previous fit to estimate the location and orientation of both lanes in the current frame (we can easily assume that the curvature of the lanes is not going to change too drastically from one frame to the other). To perform this process, I wrote the function _get_poly_from_last()_ which appears in lines 122-149 of the [utils.py](./utils/utils.py) file. The function takes the current top-down binary image together with the previous fit polynomials and performs a local search looking for active pixels around these fits.
+
 #### Sliding Window
 
+When a reliable fit can not be estimated during the previous frame, we do not only need to call the _find_lanes_hist()_ function, but we also need to identify which pixels belong to each one of the road lanes. UDACITY propose a function which I have called _get_polynomial()_ and which appears in lines 151-216 of the [utils.py](./utils/utils.py) file. This function employs a sliding window approach which starts at the bottom of the image (at the location where the lanes centers were found) and slides a searching window upwards re-centering the window based on the mean of the detected points within that window. Once the search is complete, the function employs all the detected points at the left and the right of the image to fit a second order polynomial for the left and the right lane respectively.
 
+The image below show and example of the outcome of this function where the green boxes represent the sliding windows and the red and blue points represent the detected left lane and right lane pixels respectively.
+
+<img src="./output_images/get_poly1.jpg">
+
+This function works quite well for both the _project_video_ and the _challenge_video_ but it is just not capable of dealing with more complex scenes like the ones found in the _harder_challenge_video_. This is because the function assumes that both lanes will cover the entire image as shown in the image above and the position of the windows have therefore been hard-coded in advance. When presented with a more challenging frame like the one presented below, the windows do not longer follow the direction of the lanes and we end up computing a completely wrong polynomial.
+
+<img src="./output_images/get_poly_fail.jpg">
+
+To alleviate this problem I made some slight modification to the original function and I created a new one called _get_polynomial2()_ (the amount of creativity invested in the name is outstanding!). This function can be found in the same [utils.py](./utils/utils.py) file, lines 219-388. The proposed function does not hard-code the position of the searching windows but adapt this position based on the points which have been found so far. The function fits a line to the detected points and estimates the center of the next window based on this fit so that the next window is located either on top of the current window or to its sides.
+
+The figure below shows the result of calling the proposed function on the same frame presented before. It is possible to see that the function is capable of identifying and following the direction of the lanes correctly.
+
+<img src="./output_images/get_poly2.jpg">
+
+Although this function works quite well in most of the cases, giving the algorithm the flexibility to search in different directions can also be a problem specially in binary images with a lot of noise (images where the lanes are not easily identifiable or where other objects can be distracting). I ended up using this last function although it seems that the original version may work better in the first two videos.
 
 ### 5. Determine lane curvature and vehicle position
 
@@ -131,4 +155,59 @@ Both the curvature and the distance to center are then drawn on top of the origi
 
 ### 6. Warping the detected lanes boundaries back onto the original image
 
+The final step in our processing pipeline consists in warping the detected lane boundaries back onto the original image. To do this, we start by drawing the segment of the road which has been detected in between both lanes using the function _cv2.fillPoly()_. Once this is done, we can change the perspective back into the original point of view by calling the function _get_inverse_transform()_ located in lines 30-37 of the file [utils.py](./utils/utils.py). The functions takes our top-down view image and computes an inverse transformation matrix using the _destination_ and _source_ points presented before.
+
+The final result look something like this:
+
 <img src="./output_images/result.jpg">
+
+### 7. Loading and processing video frames
+
+I created [this](Generate_video.ipynb) notebook to load the 3 different testing videos and to generate the final results using [moviepy](http://zulko.github.io/moviepy/). The notebook loads the camera calibration coefficients in the second cell and defines a _process_image(image)_ function in cell 4. _Moviepy_ will take care of calling this function frame by frame after loading the videos in cell 5. Once all the frames have been processed a video output is saved in the folder [output_videos](./output_videos).
+
+Following the advice provided by UDACITY, I defined a class [_Line()_]((./utils/Line.py)) which will take care of storing some information about each individual lane (left or right) and will also keep track of all the interesting parameters which have been measured during previous frames in order to generate a more accurate and smooth result.
+
+The _Line_ class is very simple: if a lane has been properly detected in the current frame (therefore it passes the _sanity_check_ described below), the class stores all the parameters (fit, curvature, position) into a queue. This queue will store a maximum of _K=5_ frames. Every time we need to access some information about the current lane, we do not get the most recent values, but an average over the last _K_ stored results.
+
+I also tried a different approach where instead of storing a history of _K_ values I only kept a weighted average of each parameter. Every new value receives a weight of _0.2_ while the current estimate is weighted by _0.8_. Although there was no significant difference between both approaches when working on the first two videos, this last approach performed a bit better in the _harder_challenge_video_. I believe this is because the last and more challenging video presents a lot of quick and consecutive curves where having an average over a long history of observations may not work very well.
+
+#### Processing each video frame
+
+The function _process_image(image)_ in cell 4 of the notebook takes care of executing all the previously described operations. The final pipeline looks like this:
+
+```
+  1. Correct for distortions
+  2. Apply binary filters
+  3. Get top-down view by changing perspective
+     if lane was detected in last frame:
+         4.1. Fit polynomial using previous parameters as guideline
+     else:
+         4.1. Find center of lanes at the bottom of image
+         4.2 Fit polynomial
+  5. Get curvature and distance to center
+     if sanity_check is valid:
+         6.1. Add parameters to class
+     else:
+         6.2. Ignore current fit
+  7. Get average parameters from Line class
+  8. Draw lane boundaries and road segment and warp back onto original image
+  9. Draw curvature and distance to center on image
+```
+
+The _sanity check_ is executed by the function _sanity_check()_ located in lines 406-420 of the file [utils.py](./utils/utils.py). I tried different conditions in order to verify if the detections made sense but I found out that most of these conditions did not generalize well to all the 3 testing videos. The _harder_challenge_video_, for example, presents very sharp curves where the same logic that I was applying for the _project_video_ did not apply. After trying and simplifying different conditions I ended up with 3 very basic rules:
+
+  1. The curvature of any of the lanes can not be lower than a given threshold (10 meters). This rule is basically only helpful to ignore some fits produced when in presence of a lot of noise and when using the proposed _get_polynomial2()_ function.
+
+  2. The distance in meters between both lanes at the bottom of the image needs to be within a given range: [2.3, 4.2] meters.
+
+  3. The horizontal distance between both lanes can never be smaller than 1 meter.
+
+## Discussion
+
+Overall, this project was quite interesting and it provides many opportunities to be creative by tuning different parameters, defining new and more robust filters or by developing more accurate detection pipelines. This process of tuning the different parameters, however, can also be quite frustrating considering that a solution which works perfectly fine when tested on one video may perform very poorly on the other two...
+
+I can think about a couple of ideas for further improving the current pipeline that I was not able to explore given the lack of time:
+
+  1. The binary filters used to threshold the images can still be made much better. A possible approach I read about would be to define adaptive thresholds which would be a function of some parameters like the average illumination of the current frame. In the same way, the set of filters to be used could also be chosen adaptively, thus employing more proper color spaces according to the the type of image we are currently evaluating.
+
+  2. The sanity check is a function were I did not invest too much time and where I recognize that additional improvements could be made. To be able to discard complicated frames would significantly improve the general performance.
