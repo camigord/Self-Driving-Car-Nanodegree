@@ -263,6 +263,22 @@ I have tested the proposed pipeline in the different testing frames located in t
 
 #### 2.4 Generating videos
 
+I created [this](./Generate_video.ipynb) notebook to load the different testing videos and to generate the final results using _moviepy_. The notebook loads all the different components (classifier, scaler, PCA) in the second cell and defines a _process_frame(image)_ function in cell 5. Moviepy will take care of calling this function frame by frame after loading the videos in cells 6 and 7. Once all the frames have been processed a video output is saved in [output_videos](./output_videos).
 
+This final notebook also defines a _Detections()_ class which will work as a queue for storing all the detection windows collected during the last _K_ frames. The idea is that by collecting the heat-maps from many frames, we can define a threshold which looks for areas in the image that have collected a lot of _heat_ during the last frames and are therefore more likely to contain a vehicle. This procedure helps us to decrease the number of false positives detected by our classifier.
+
+Executing the final pipeline in the project video can take some time given the number of searching windows we have defined; for this reason, in this stage I have also define a region of interest in the X-axis which considers mainly the right side of the images.
+
+The generated videos can be found in the [output_videos](./output_videos) folder. The animation at the top of this README also presents the final results on the project video.
 
 ## Discussion
+
+One of the main problems of the proposed pipeline, in my opinion, is the time it requires to process each individual frame. Although the classifier's inference time is quite short, the required processing time per frame scales rapidly with the number of searching windows. Moreover, the accuracy of the detection pipeline is proportional to the number of windows, thus making it impossible to just reduce this number without proper consideration.
+
+Another shortcoming of the current approach can be observed when dealing with overlapping detections as shown in the image below. The use of a heat-map does nor allow us to distinguish between two different detections when the windows representing each of them overlap.
+
+<img src="./assets/overlap.jpg">
+
+It is clear that better and more robust results can be obtained nowadays by using deep learning architectures. A very nice and complete example of this can be found [here](http://publications.lib.chalmers.se/records/fulltext/238495/238495.pdf). Deep convolutional networks do not require us to define a set of features and many of the state of the art architectures can even operate on real time (more than 30 frames per second).
+
+Nevertheless, the current approach could still be improved a little bit. We could improve our classifier performance either by choosing a different technique, or by collecting more data. Moreover, we could deal with the problem of overlapping detections by storing a template of the current detections. A specific class could then be used to track and update each particular template as they enter or leave the scene. Because we will be tracking templates continuously, there should not be a significant change from frame to frame. 
